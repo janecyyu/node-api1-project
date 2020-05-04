@@ -3,7 +3,13 @@ const express = require("express");
 const server = express();
 server.use(express.json()); //teaches express how to read json from the body
 
-let userList = [];
+let userList = [
+    {
+        id: 1, // hint: use the shortid npm package to generate it
+        name: "Jane Doe", // String, required
+        bio: "Not Tarzan's Wife, another Jane",  // String, required
+      }
+];
 // server.get('/', (req, res) => {
 //   res.send('Hello World');
 // });
@@ -16,7 +22,7 @@ server.post("/api/users", (req, res) => {
   } else {
     //If the information about the user is valid:
     userList.push(newUser);
-    res.status(201).send(newUser);
+    res.status(201).send(userList);
   }
   //If there's an error while saving the user:
   if (userList.hasOwnProperty(newUser)) {
@@ -31,7 +37,18 @@ server.get("/api/users", (req, res) => {
   if (!req.body === userList) {
     res.status(500).send("The users information could not be retrieved.");
   } else {
-    res.status(200).send(req.body);
+    res.status(200).send(userList);
+  }
+});
+
+server.get("/api/users/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const getUser = userList.filter((user) => user.id === id);
+  //if the user with the specified id is not found:
+  if(getUser.length<=0){
+    res.status(404).send("The user information could not be retrieved.");
+  }else{
+      res.status(200).send(getUser)
   }
 });
 
