@@ -9,8 +9,7 @@ let userList = [];
 // });
 
 server.post("/api/users", (req, res) => {
-    const newUser = req.body;
-
+  const newUser = req.body;
   //If the request body is missing the name or bio property:
   if (newUser.name === undefined || newUser.bio === undefined) {
     res.status(400).send("Please provide name and bio for the user.");
@@ -24,6 +23,15 @@ server.post("/api/users", (req, res) => {
     res
       .status(500)
       .send("There was an error while saving the user to the database");
+  }
+});
+
+server.get("/api/users", (req, res) => {
+  //If there's an error in retrieving the users from the database
+  if (!req.body === userList) {
+    res.status(500).send("The users information could not be retrieved.");
+  } else {
+    res.status(200).send(req.body);
   }
 });
 
