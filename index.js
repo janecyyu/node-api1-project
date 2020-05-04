@@ -72,4 +72,32 @@ server.delete("/api/users/:id", (req, res) => {
   }
 });
 
+server.put("/api/users/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const getUser = userList.filter((user) => user.id === id);
+  let newList;
+  //if the user with the specified id is not found:
+  if (getUser.length <= 0) {
+    res.status(404).send("The user with the specified ID does not exist.");
+  } //If the request body is missing the name or bio property:
+  else if (req.body.name === undefined || req.body.bio === undefined) {
+    res.status(400).send("Please provide name and bio for the user.");
+  } else {
+    newList = userList.filter((user) => user.id !== id);
+    if (req.body.id === id) {
+      newList.push(req.body);
+      res.status(200).send(newList);
+    } else {
+      newList.push(req.body);
+      res.status(200).send(newList);
+      userList = newList;
+    }
+  }
+
+  //If there's an error when updating the user:
+  if (newList === userList) {
+    res.status(500).send("The user information could not be modified.");
+  }
+});
+
 server.listen(8000, () => console.log("API running on port 8000"));
