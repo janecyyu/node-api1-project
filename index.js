@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const shortid = require('shortid');
+const shortid = require("shortid");
 
 const server = express();
 server.use(express.json()); //teaches express how to read json from the body
@@ -56,7 +56,7 @@ server.get("/api/users", (req, res) => {
 });
 
 server.get("/api/users/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
   const getUser = userList.filter((user) => user.id === id);
   //if the user with the specified id is not found:
   if (getUser.length === 0) {
@@ -71,7 +71,7 @@ server.get("/api/users/:id", (req, res) => {
 });
 
 server.delete("/api/users/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
   const getUser = userList.filter((user) => user.id === id);
   //if the user with the specified id is not found:
   if (getUser.length === 0) {
