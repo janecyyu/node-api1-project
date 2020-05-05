@@ -35,6 +35,7 @@ server.post("/api/users", (req, res) => {
   }
 
   //If the information about the user is valid:
+
   userList.push(newUser);
   res.status(201).send(userList);
 
@@ -87,7 +88,7 @@ server.delete("/api/users/:id", (req, res) => {
 });
 
 server.put("/api/users/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
   const getUser = userList.filter((user) => user.id === id);
 
   //If the user with the specified id is not found:
