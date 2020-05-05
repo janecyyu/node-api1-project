@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const shortid = require('shortid');
 
 const server = express();
 server.use(express.json()); //teaches express how to read json from the body
@@ -7,7 +8,7 @@ server.use(cors());
 
 let userList = [
   {
-    id: 1, // hint: use the shortid npm package to generate it
+    id: shortid.generate(), // hint: use the shortid npm package to generate it
     name: "Jane Doe", // String, required
     bio: "Not Tarzan's Wife, another Jane", // String, required
   },
