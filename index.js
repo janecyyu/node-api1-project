@@ -1,7 +1,9 @@
 const express = require("express");
+const cors = require("cors");
 
 const server = express();
 server.use(express.json()); //teaches express how to read json from the body
+server.use(cors());
 
 let userList = [
   {
@@ -19,13 +21,14 @@ server.post("/api/users", (req, res) => {
   //If the request body is missing the name or bio property:
   if (newUser.name === undefined || newUser.bio === undefined) {
     res.status(400).send("Please provide name and bio for the user.");
-  } else {
-    //If the information about the user is valid:
-    userList.push(newUser);
-    res.status(201).send(userList);
   }
+
+  //If the information about the user is valid:
+  userList.push(newUser);
+  res.status(201).send(userList);
+
   //If there's an error while saving the user:
-  if (userList.hasOwnProperty(newUser)) {
+  if (!userList.hasOwnProperty(newUser)) {
     res
       .status(500)
       .send("There was an error while saving the user to the database");
@@ -34,18 +37,18 @@ server.post("/api/users", (req, res) => {
 
 server.get("/api/users", (req, res) => {
   //If there's an error in retrieving the users from the database
-  if (!req.body === userList) {
+  if (userList === undefined) {
     res.status(500).send("The users information could not be retrieved.");
-  } else {
-    res.status(200).send(userList);
   }
+
+  res.status(200).send(userList);
 });
 
 server.get("/api/users/:id", (req, res) => {
   const id = Number(req.params.id);
   const getUser = userList.filter((user) => user.id === id);
   //if the user with the specified id is not found:
-  if (getUser.length <= 0) {
+  if (getUser.length === 0) {
     res.status(404).send("The user information could not be retrieved.");
   } else {
     res.status(200).send(getUser);
@@ -60,7 +63,7 @@ server.delete("/api/users/:id", (req, res) => {
   const id = Number(req.params.id);
   const getUser = userList.filter((user) => user.id === id);
   //if the user with the specified id is not found:
-  if (getUser.length <= 0) {
+  if (getUser.length === 0) {
     res.status(404).send("The user with the specified ID does not exist.");
   } else {
     userList = userList.filter((user) => user.id !== id);
@@ -75,27 +78,25 @@ server.delete("/api/users/:id", (req, res) => {
 server.put("/api/users/:id", (req, res) => {
   const id = Number(req.params.id);
   const getUser = userList.filter((user) => user.id === id);
-  let newList;
-  //if the user with the specified id is not found:
-  if (getUser.length <= 0) {
+
+  //If the user with the specified id is not found:
+  if (getUser.length === 0) {
     res.status(404).send("The user with the specified ID does not exist.");
-  } //If the request body is missing the name or bio property:
-  else if (req.body.name === undefined || req.body.bio === undefined) {
-    res.status(400).send("Please provide name and bio for the user.");
-  } else {
-    newList = userList.filter((user) => user.id !== id);
-    if (req.body.id === id) {
-      newList.push(req.body);
-      res.status(200).send(newList);
-    } else {
-      newList.push(req.body);
-      res.status(200).send(newList);
-      userList = newList;
-    }
   }
 
+  //If the request body is missing the name or bio property:
+  if (req.body.name === undefined || req.body.bio === undefined) {
+    res.status(400).send("Please provide name and bio for the user.");
+  }
+
+  let newList = userList.filter((user) => user.id !== id);
+
+  newList.push(req.body);
+  userList = newList;
+  res.status(200).send(newList);
+
   //If there's an error when updating the user:
-  if (newList === userList) {
+  if (newList.hasOwnProperty(req.body)) {
     res.status(500).send("The user information could not be modified.");
   }
 });
