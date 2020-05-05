@@ -16,6 +16,7 @@ function App() {
         <div key={user.id} className="user-container">
           <h3>{user.name}</h3>
           <h4>{user.bio}</h4>
+          <button>delete</button>
         </div>
       ))}
     </div>

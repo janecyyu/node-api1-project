@@ -9,8 +9,18 @@ server.use(cors());
 let userList = [
   {
     id: shortid.generate(), // hint: use the shortid npm package to generate it
-    name: "Jane Doe", // String, required
-    bio: "Not Tarzan's Wife, another Jane", // String, required
+    name: "Mary Doe", // String, required
+    bio: "Tarzan's Wife.", // String, required
+  },
+  {
+    id: shortid.generate(), // hint: use the shortid npm package to generate it
+    name: "Mark Doe", // String, required
+    bio: "From UK.", // String, required
+  },
+  {
+    id: shortid.generate(), // hint: use the shortid npm package to generate it
+    name: "Helen Doe", // String, required
+    bio: "Grow up in Canada.", // String, required
   },
 ];
 // server.get('/', (req, res) => {
